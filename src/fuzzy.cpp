@@ -8,6 +8,8 @@ Fuzzy::Fuzzy(QStringList *strings)
 
 Fuzzy::~Fuzzy()
 {
+    // TODO learn how to do GC in Qt
+    //
     // if (strings)
     //     delete strings;
 }
