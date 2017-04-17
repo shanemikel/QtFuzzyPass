@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     QStringList patterns;
-    for (int i = 0; i < argc; ++i)
+    for (int i = 1; i < argc; ++i)
         patterns << argv[i];
 
     QDir passwordStore = QDir(QDir().homePath() + "/.password-store");
