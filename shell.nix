@@ -9,7 +9,6 @@ let
   ];
   overrideDerivation = d:
     nixpkgs.lib.overrideDerivation d (p: {
-      NIX_SHELL = 1;
       shellHook = appendShellHook p ''
         export PS1=' '
         . ~/.nixpkgs/shellrc
