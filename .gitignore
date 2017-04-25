@@ -1,3 +1,5 @@
 Makefile
-QtFuzzyPassFinder
+QtFuzzyPass
 out
+.qmake.stash
+proto
