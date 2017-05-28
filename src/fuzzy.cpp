@@ -11,14 +11,6 @@ Fuzzy::Fuzzy(Fuzzy && other)
 {
 }
 
-// Fuzzy::operator=(const Fuzzy & other)
-// {
-// }
-
-// Fuzzy::operator=(Fuzzy && other)
-// {
-// }
-
 Fuzzy::Fuzzy(const QStringList & strings)
     : strings_(strings)
 {
@@ -28,10 +20,6 @@ Fuzzy::Fuzzy(QStringList && strings)
     : strings_(strings)
 {
 }
-
-// Fuzzy::~Fuzzy()
-// {
-// }
 
 QStringList Fuzzy::match(const QString searchString) const
 {
@@ -43,8 +31,6 @@ QStringList Fuzzy::match(const QString searchString) const
     QList<Match> tmp;
 
     QRegExp regx = fromString(searchString);
-    // for (int i = 0; i != strings.size(); ++i) {
-    //     QString string = strings.at(i);
     for (auto string : strings_) {
         int pos = regx.indexIn(string);
         if (pos > -1) {
@@ -65,8 +51,6 @@ QStringList Fuzzy::match(const QString searchString) const
         });
 
     QStringList res;
-    // for (int i = 0; i < tmp.size(); ++i)
-    //     res << tmp.at(i).item;
     for (auto t : tmp)
         res += t.item;
 
@@ -76,11 +60,6 @@ QStringList Fuzzy::match(const QString searchString) const
 QRegExp Fuzzy::fromString(const QString string) const
 {
     QString tmp;
-    // QString::const_iterator i;
-    // for (i = string.cbegin(); i != string.end(); ++i) {
-    //     tmp.append(*i);
-    //     tmp.append("*");
-    // }
     for (auto c : string) {
         tmp += c;
         tmp += "*";
