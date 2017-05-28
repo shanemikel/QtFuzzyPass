@@ -1,20 +1,39 @@
 
 #include "inc/fuzzy.h"
 
-Fuzzy::Fuzzy(QStringList *strings)
+Fuzzy::Fuzzy(const Fuzzy & other)
+    : strings_(other.strings_)
 {
-    this->strings = strings;
 }
 
-Fuzzy::~Fuzzy()
+Fuzzy::Fuzzy(Fuzzy && other)
+    : strings_(other.strings_)
 {
-    // TODO learn how to do GC in Qt
-    //
-    // if (strings)
-    //     delete strings;
 }
 
-QStringList* Fuzzy::match(QString const searchString)
+// Fuzzy::operator=(const Fuzzy & other)
+// {
+// }
+
+// Fuzzy::operator=(Fuzzy && other)
+// {
+// }
+
+Fuzzy::Fuzzy(const QStringList & strings)
+    : strings_(strings)
+{
+}
+
+Fuzzy::Fuzzy(QStringList && strings)
+    : strings_(strings)
+{
+}
+
+// Fuzzy::~Fuzzy()
+// {
+// }
+
+QStringList Fuzzy::match(const QString searchString) const
 {
     struct Match
     {
@@ -23,15 +42,16 @@ QStringList* Fuzzy::match(QString const searchString)
     };
     QList<Match> tmp;
 
-    QRegExp regx = *fromString(searchString);
-    for (int i = 0; i < strings->size(); ++i) {
-        QString string = strings->at(i);
+    QRegExp regx = fromString(searchString);
+    // for (int i = 0; i != strings.size(); ++i) {
+    //     QString string = strings.at(i);
+    for (auto string : strings_) {
         int pos = regx.indexIn(string);
         if (pos > -1) {
             struct Match match;
             match.item = string;
             match.capturedLength = regx.cap(0).size();
-            tmp << match;
+            tmp += match;
         }
     }
 
@@ -44,29 +64,34 @@ QStringList* Fuzzy::match(QString const searchString)
                 return m1.item < m2.item;
         });
 
-    QStringList *res = new QStringList();
-    for (int i = 0; i < tmp.size(); ++i)
-        *res << tmp.at(i).item;
+    QStringList res;
+    // for (int i = 0; i < tmp.size(); ++i)
+    //     res << tmp.at(i).item;
+    for (auto t : tmp)
+        res += t.item;
 
     return res;
 }
 
-QRegExp* Fuzzy::fromString(QString const string)
+QRegExp Fuzzy::fromString(const QString string) const
 {
     QString tmp;
-
-    QString::const_iterator i;
-    for (i = string.cbegin(); i != string.end(); ++i) {
-        tmp.append(*i);
-        tmp.append("*");
+    // QString::const_iterator i;
+    // for (i = string.cbegin(); i != string.end(); ++i) {
+    //     tmp.append(*i);
+    //     tmp.append("*");
+    // }
+    for (auto c : string) {
+        tmp += c;
+        tmp += "*";
     }
     if (tmp.length() >= 1)
         tmp.remove(tmp.length()-1, 1);
 
-    QRegExp *regx = new QRegExp();
-    regx->setPatternSyntax(QRegExp::Wildcard);
-    regx->setMinimal(true);
-    regx->setPattern(tmp);
+    QRegExp regx;
+    regx.setPatternSyntax(QRegExp::Wildcard);
+    regx.setMinimal(true);
+    regx.setPattern(tmp);
     return regx;
 }
 

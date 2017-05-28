@@ -9,16 +9,21 @@
 class Fuzzy
 {
 public:
-    Fuzzy(QStringList *strings);
-    ~Fuzzy();
+    Fuzzy(const Fuzzy & other);
+    Fuzzy(Fuzzy && other);
 
-    QStringList* match(QString const searchString);
+    Fuzzy & operator=(const Fuzzy & other) =delete;
+    Fuzzy & operator=(Fuzzy && other) =delete;
+
+    Fuzzy(const QStringList & strings);
+    Fuzzy(QStringList && strings);
+
+    QStringList match(const QString searchString) const;
 
 private:
-    QRegExp* fromString(QString const string);
+    QRegExp fromString(const QString string) const;
 
-    QStringList *strings;
-    
+    const QStringList strings_;
 };
 
-#endif
+#endif FUZZY_H

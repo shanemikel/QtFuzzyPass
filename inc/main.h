@@ -2,13 +2,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <iostream>
 #include <QCoreApplication>
-#include <QDir>
-#include <QMap>
+#include <QCommandLineParser>
+#include "inc/test.h"
 
-#include "inc/fuzzy.h"
+int main(int argc, char * argv[]);
 
-int main(int argc, char *argv[]);
-
-#endif
+#endif MAIN_H
