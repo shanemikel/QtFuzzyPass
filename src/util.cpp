@@ -1,6 +1,20 @@
 
 #include "inc/util.h"
 
+util::NoPasswordStore::NoPasswordStore()
+    : runtime_error("No password store available at ~/.password-store")
+{
+}
+
+QDir util::getPasswordStore()
+{
+    QDir passwordStore = QDir(QDir().homePath() + "/.password-store");
+    if (! passwordStore.exists())
+        throw NoPasswordStore();
+
+    return passwordStore;
+}
+
 QMap<QString, QFileInfo> util::makePasswordMap(const QDir & passwordStore)
 {
     QMap<QString, QFileInfo> map;

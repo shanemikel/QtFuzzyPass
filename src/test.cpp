@@ -3,22 +3,10 @@
 
 int test::main(const QStringList & patterns)
 {
-    QDir passwordStore = QDir(QDir().homePath() + "/.password-store");
+    QStringList passwords = util::makePasswordMap(util::getPasswordStore()).keys();
+    testFuzzy(passwords, patterns);
 
-    if (passwordStore.exists()) {
-
-        QMap<QString, QFileInfo> passwordMap = util::makePasswordMap(passwordStore);
-        QStringList passwords = QStringList(passwordMap.keys());
-
-        testFuzzy(passwords, patterns);
-
-        return 0;
-    } else {
-
-        std::cerr << "ERR: ~/.password-store doesn't exist" << std::endl;
-
-        return 1;
-    }
+    return 0;
 }
 
 void test::testFuzzy(const QStringList & passwds, const QStringList & pattns)
