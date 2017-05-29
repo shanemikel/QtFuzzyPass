@@ -8,6 +8,11 @@ int cli::main(const QStringList & patterns)
         return 1;
     }
 
-    std::cout << "Not implemented" << std::endl;
-    return 1;
+    QProcess pass;
+    pass.start("pass", QStringList() << "--help");
+    if (! pass.waitForStarted() || ! pass.waitForFinished())
+        return 1;
+    std::cout << qPrintable(pass.readAll());
+
+    return 0;
 }

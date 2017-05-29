@@ -5,6 +5,7 @@
 #include "inc/fuzzy.h"
 
 #include <iostream>
+#include <QProcess>
 
 namespace cli {
     int main(const QStringList & pattern);
