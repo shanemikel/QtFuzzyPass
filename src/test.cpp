@@ -7,7 +7,7 @@ int test::main(const QStringList & patterns)
 
     if (passwordStore.exists()) {
 
-        QMap<QString, QFileInfo> passwordMap = makePasswordMap(passwordStore);
+        QMap<QString, QFileInfo> passwordMap = util::makePasswordMap(passwordStore);
         QStringList passwords = QStringList(passwordMap.keys());
 
         testFuzzy(passwords, patterns);
@@ -15,7 +15,7 @@ int test::main(const QStringList & patterns)
         return 0;
     } else {
 
-        std::cout << "ERR: ~/.password-store doesn't exist" << std::endl;
+        std::cerr << "ERR: ~/.password-store doesn't exist" << std::endl;
 
         return 1;
     }
@@ -38,36 +38,4 @@ void test::testFuzzy(const QStringList & passwds, const QStringList & pattns)
                 std::cout << "    " << qPrintable(r) << std::endl;
         }
     }
-}
-
-QMap<QString, QFileInfo> test::makePasswordMap(const QDir & passwordStore)
-{
-    QMap<QString, QFileInfo> map;
-    QList<QDir> dirs;
-    dirs += passwordStore;
-
-    for (int i = 0; i != dirs.size(); ++i) {
-        QDir currentDir = dirs.at(i);
-        QFileInfoList infoLst;
-
-        currentDir.setFilter(QDir::Files);
-        infoLst = currentDir.entryInfoList();
-        for (auto fileInfo : infoLst) {
-            if (fileInfo.suffix() != "gpg")
-                continue;
-
-            QString dir = fileInfo.dir().absolutePath();
-            QString file = fileInfo.completeBaseName();
-            QString name = dir.split(passwordStore.absolutePath()).at(1);
-            name = name.remove(0, 1) + "/" + file;
-            map.insert(name, fileInfo);
-        }
-
-        currentDir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-        infoLst = currentDir.entryInfoList();
-        for (auto dirInfo : infoLst)
-            dirs.append(QDir(dirInfo.filePath()));
-    }
-
-    return map;
 }

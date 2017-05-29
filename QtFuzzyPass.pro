@@ -1,6 +1,6 @@
 HEADERS	  = $$files(inc/*.h)
 SOURCES   = $$files(src/*.cpp)
-RESOURCES = qrc/resources.qrc
+# RESOURCES = qrc/resources.qrc
 
 CONFIG += qt
 CONFIG -= app_bundle

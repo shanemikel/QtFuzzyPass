@@ -2,9 +2,12 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include "inc/test.h"
+#include "inc/cli.h"
+
+#include <iostream>
 #include <QCoreApplication>
 #include <QCommandLineParser>
-#include "inc/test.h"
 
 int main(int argc, char * argv[]);
 

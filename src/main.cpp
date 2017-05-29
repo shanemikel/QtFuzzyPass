@@ -11,13 +11,18 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
 
     parser.addOptions({
-            {"test",
+            {{"t", "test"},
                     QCoreApplication::translate("main", "A simple testing interface")},
+            {{"c", "cli"},
+                    QCoreApplication::translate("main", "Command line interface")},
         });
     parser.process(app);
 
-    if (parser.isSet("test"))
+    if (parser.isSet("test")) {
         return test::main(parser.positionalArguments());
-    else
-        return 0;
+    } else if (parser.isSet("cli")) {
+        return cli::main(parser.positionalArguments());
+    } else {
+        return 1;
+    }
 }
