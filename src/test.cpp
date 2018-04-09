@@ -1,29 +1,35 @@
+#include "test.hpp"
 
-#include "inc/test.h"
+#include <iostream>
 
-int test::main(const QStringList & patterns)
-{
-    QStringList passwords = util::makePasswordMap(util::getPasswordStore()).keys();
-    testFuzzy(passwords, patterns);
+#include "fuzzy.hpp"
+#include "util.hpp"
 
-    return 0;
-}
+namespace test {
+    using namespace std;
 
-void test::testFuzzy(const QStringList & passwds, const QStringList & pattns)
-{
-    if (pattns.size() == 0) {
-        for (auto passwd : passwds)
-            std::cout << qPrintable(QString("%1").arg(passwd)) << std::endl;
-    } else {
-        Fuzzy fz = Fuzzy(passwds);
-        for (auto pattn : pattns) {
-            std::cout << qPrintable(pattn) << std::endl;
+    int main(const QStringList& patterns) {
+        QStringList passwords = util::makePasswordMap(util::getPasswordStore()).keys();
+        fuzzy(passwords, patterns);
 
-            QStringList res = fz.match(pattn);
-            if (! res.size())
-                continue;
-            for (auto r : res)
-                std::cout << "    " << qPrintable(r) << std::endl;
+        return 0;
+    }
+
+    void fuzzy(const QStringList& passwds, const QStringList& pattns) {
+        if (pattns.size() == 0) {
+            for (auto passwd : passwds)
+                cout << qPrintable(QString("%1").arg(passwd)) << endl;
+        } else {
+            Fuzzy fz = Fuzzy(passwds);
+            for (auto pattn : pattns) {
+                cout << qPrintable(pattn) << endl;
+
+                QStringList res = fz.match(pattn);
+                if (! res.size())
+                    continue;
+                for (auto r : res)
+                    cout << "    " << qPrintable(r) << endl;
+            }
         }
     }
 }

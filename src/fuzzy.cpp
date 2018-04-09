@@ -1,37 +1,20 @@
+#include <fuzzy.hpp>
 
-#include "inc/fuzzy.h"
+using namespace std;
 
-Fuzzy::Fuzzy(const Fuzzy & other)
-    : strings_(other.strings_)
-{
-}
+Fuzzy::Fuzzy(const QStringList& strings)
+    : strings(strings)
+{}
 
-Fuzzy::Fuzzy(Fuzzy && other)
-    : strings_(other.strings_)
-{
-}
-
-Fuzzy::Fuzzy(const QStringList & strings)
-    : strings_(strings)
-{
-}
-
-Fuzzy::Fuzzy(QStringList && strings)
-    : strings_(strings)
-{
-}
-
-QStringList Fuzzy::match(const QString searchString) const
-{
-    struct Match
-    {
+QStringList Fuzzy::match(const QString& searchString) const {
+    struct Match {
         QString item;
         int capturedLength;
     };
     QList<Match> tmp;
 
     QRegExp regx = fromString(searchString);
-    for (auto string : strings_) {
+    for (auto string : strings) {
         int pos = regx.indexIn(string);
         if (pos > -1) {
             struct Match match;
@@ -41,14 +24,15 @@ QStringList Fuzzy::match(const QString searchString) const
         }
     }
 
-    std::sort(tmp.begin(), tmp.end(), [](struct Match m1, struct Match m2) {
-            if (m1.capturedLength < m2.capturedLength)
-                return true;
-            else if (m2.capturedLength < m1.capturedLength)
-                return false;
-            else
-                return m1.item < m2.item;
-        });
+    sort(tmp.begin(), tmp.end(),
+         [](struct Match m1, struct Match m2) {
+             if (m1.capturedLength < m2.capturedLength)
+                 return true;
+             else if (m2.capturedLength < m1.capturedLength)
+                 return false;
+             else
+                 return m1.item < m2.item;
+         });
 
     QStringList res;
     for (auto t : tmp)
@@ -57,8 +41,7 @@ QStringList Fuzzy::match(const QString searchString) const
     return res;
 }
 
-QRegExp Fuzzy::fromString(const QString string) const
-{
+QRegExp Fuzzy::fromString(const QString& string) const {
     QString tmp;
     for (auto c : string) {
         tmp += c;

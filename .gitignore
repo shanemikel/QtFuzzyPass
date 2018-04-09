@@ -3,3 +3,6 @@ QtFuzzyPass
 out
 .qmake.stash
 proto
+moc_gui.cpp
+moc_predefs.h
+qrc_resources.cpp
