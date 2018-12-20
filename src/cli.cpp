@@ -6,9 +6,11 @@
 #include <fuzzy.hpp>
 
 namespace cli {
+    using namespace std;
+
     int main(const QStringList& patterns) {
         if (patterns.size() != 1) {
-            std::cerr << "Error: expecting exaclty one pattern argument" << std::endl;
+            cerr << "Error: expecting exaclty one pattern argument" << endl;
             return 1;
         }
 
@@ -16,7 +18,7 @@ namespace cli {
         pass.start("pass", QStringList() << "--help");
         if (! pass.waitForStarted() || ! pass.waitForFinished())
             return 1;
-        std::cout << qPrintable(pass.readAll());
+        cout << qPrintable(pass.readAll());
 
         return 0;
     }

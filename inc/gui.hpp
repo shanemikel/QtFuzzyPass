@@ -14,23 +14,24 @@ namespace gui {
         Q_OBJECT
     public:
         explicit Window(const QString& title, QWidget* parent = Q_NULLPTR);
+        ~Window() override;
 
         void resize(int width, int height);
         void setPasswords(const QStringList& passwords);
-        void setList(const QStringList& new_list);
+        void setList(const QStringList& newList);
 
     private:
         int selected_row = 0;
         Fuzzy* finder;
 
-        QVBoxLayout* layout = Q_NULLPTR;
-        QLineEdit* search_bar = Q_NULLPTR;
-        QListWidget* pass_list = Q_NULLPTR;
+        QPointer<QVBoxLayout> layout;
+        QPointer<QLineEdit> searchBar;
+        QPointer<QListWidget> passList;
 
     public:
         virtual void keyPressEvent(QKeyEvent* event) override;
 
     private slots:
-        void search(const QString& search_string);
+        void search(const QString& searchString);
     };
 }

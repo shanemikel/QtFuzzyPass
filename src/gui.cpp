@@ -12,30 +12,45 @@ namespace gui {
         Window window ("QtFuzzyPass");
         window.setWindowIcon(QIcon(":/icons/key.png"));
         window.resize(500, 300);
-        window.show();
 
         auto passwords =
             QStringList(util::makePasswordMap(util::getPasswordStore()).keys());
         window.setPasswords(passwords);
 
+        window.show();
         return app.exec();
     }
 
     Window::Window(const QString& title, QWidget* parent) : QWidget(parent) {
         setWindowTitle(title);
-        layout = new QVBoxLayout;
 
-        search_bar = new QLineEdit(this);
-        search_bar->setAlignment(Qt::AlignHCenter);
-        layout->addWidget(search_bar);
+        layout = new QVBoxLayout();
 
-        pass_list = new QListWidget(this);
-        layout->addWidget(pass_list);
+        searchBar = new QLineEdit(this);
+        searchBar->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(searchBar);
+
+        passList = new QListWidget(this);
+        layout->addWidget(passList);
 
         setLayout(layout);
 
-        connect(search_bar, SIGNAL (textChanged(const QString&)),
+        connect(searchBar, SIGNAL (textChanged(const QString&)),
                 this, SLOT (search(const QString&)));
+    }
+
+    Window::~Window() {
+        // cerr << "Deleting main window." << endl;
+
+        delete finder;
+        delete layout;
+        delete searchBar;
+
+        while (passList->count() != 0) {
+            auto item = passList->takeItem(0);
+            delete item;
+        }
+        delete passList;
     }
 
     void Window::resize(int width, int height) {
@@ -48,15 +63,17 @@ namespace gui {
         setList(finder->match(""));
     }
 
-    void Window::setList(const QStringList& new_list) {
-        while (pass_list->count() != 0)
-            pass_list->takeItem(0);
-        for (const auto& pass : new_list) {
-            pass_list->addItem(pass);
-            pass_list->item(pass_list->count() - 1)->setTextAlignment(Qt::AlignRight);
+    void Window::setList(const QStringList& newList) {
+        while (passList->count() != 0) {
+            auto item = passList->takeItem(0);
+            delete item;
+        }
+        for (const auto& pass : newList) {
+            passList->addItem(pass);
+            passList->item(passList->count() - 1)->setTextAlignment(Qt::AlignRight);
         }
         selected_row = 0;
-        pass_list->setCurrentRow(selected_row);
+        passList->setCurrentRow(selected_row);
     }
 
     void Window::keyPressEvent(QKeyEvent* event) {
@@ -67,22 +84,22 @@ namespace gui {
         case Qt::Key_Up:
             if (selected_row > 0) {
                 selected_row -= 1;
-                pass_list->setCurrentRow(selected_row);
+                passList->setCurrentRow(selected_row);
             }
             break;
         case Qt::Key_Down:
-            if (selected_row < (pass_list->count() - 1)) {
+            if (selected_row < (passList->count() - 1)) {
                 selected_row += 1;
-                pass_list->setCurrentRow(selected_row);
+                passList->setCurrentRow(selected_row);
             }
             break;
         case Qt::Key_Return:
-            if (pass_list->currentItem() != Q_NULLPTR) {
-                QMessageBox pass_msg;
-                pass_msg.setText("Copying password to clipboard:");
-                pass_msg.setInformativeText(pass_list->currentItem()->text());
-                pass_msg.setStandardButtons(QMessageBox::Abort);
-                pass_msg.exec();
+            if (passList->currentItem() != Q_NULLPTR) {
+                QMessageBox passMsg;
+                passMsg.setText("Copying password to clipboard:");
+                passMsg.setInformativeText(passList->currentItem()->text());
+                passMsg.setStandardButtons(QMessageBox::Abort);
+                passMsg.exec();
             } else {
                 cerr << "No current item selected..." << endl;
             }
@@ -93,7 +110,7 @@ namespace gui {
         }
     }
 
-    void Window::search(const QString& search_string) {
-        setList(finder->match(search_string));
+    void Window::search(const QString& searchString) {
+        setList(finder->match(searchString));
     }
 }
