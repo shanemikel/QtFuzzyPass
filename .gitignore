@@ -1,8 +1,9 @@
+pass-qt
+.directory
 Makefile
-QtFuzzyPass
 out
 .qmake.stash
 proto
-moc_gui.cpp
+moc_*.cpp
 moc_predefs.h
 qrc_resources.cpp

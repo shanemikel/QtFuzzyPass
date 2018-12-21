@@ -1,17 +1,66 @@
 #include "util.hpp"
 
-#include <exception>
-using namespace std;
+#include <QRegExp>
+#include <algorithm>
 
 namespace util {
-    NoPasswordStore::NoPasswordStore()
-        : runtime_error("No password store available at ~/.password-store")
-    {}
+    FuzzyFinder::FuzzyFinder(const QStringList& strings) : strings(strings) {}
+
+    QStringList FuzzyFinder::match(const QString& searchString) const {
+        struct Match {
+            QString item;
+            int capturedLength;
+        };
+        QList<Match> tmp;
+
+        auto regx = patternFromString(searchString);
+        for (auto string : strings) {
+            int pos = regx.indexIn(string);
+            if (pos > -1) {
+                struct Match match;
+                match.item = string;
+                match.capturedLength = regx.cap(0).size();
+                tmp += match;
+            }
+        }
+
+        std::sort(tmp.begin(), tmp.end(),
+                  [](struct Match m1, struct Match m2) {
+                      if (m1.capturedLength < m2.capturedLength)
+                          return true;
+                      else if (m2.capturedLength < m1.capturedLength)
+                          return false;
+                      else
+                          return m1.item < m2.item;
+                  });
+
+        QStringList res;
+        for (auto t : tmp)
+            res += t.item;
+
+        return res;
+    }
+
+    QRegExp FuzzyFinder::patternFromString(const QString& string) const {
+        QString tmp;
+        for (auto c : string) {
+            tmp += c;
+            tmp += "*";
+        }
+        if (tmp.length() >= 1)
+            tmp.remove(tmp.length()-1, 1);
+
+        QRegExp regx;
+        regx.setPatternSyntax(QRegExp::Wildcard);
+        regx.setMinimal(true);
+        regx.setPattern(tmp);
+        return regx;
+    }
 
     QDir getPasswordStore() {
         QDir passwordStore = QDir(QDir().homePath() + "/.password-store");
         if (! passwordStore.exists())
-            throw NoPasswordStore();
+            throw "No password store available at ~/.password-store";
 
         return passwordStore;
     }

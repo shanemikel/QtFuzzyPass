@@ -3,8 +3,6 @@
 #include <QProcess>
 #include <iostream>
 
-#include <fuzzy.hpp>
-
 namespace cli {
     using namespace std;
 

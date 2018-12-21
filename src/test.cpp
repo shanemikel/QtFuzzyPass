@@ -1,35 +1,31 @@
 #include "test.hpp"
+#include "util.hpp"
 
 #include <iostream>
-
-#include "fuzzy.hpp"
-#include "util.hpp"
 
 namespace test {
     using namespace std;
 
     int main(const QStringList& patterns) {
-        QStringList passwords = util::makePasswordMap(util::getPasswordStore()).keys();
-        fuzzy(passwords, patterns);
+        auto passwords = util::makePasswordMap(util::getPasswordStore()).keys();
 
-        return 0;
-    }
-
-    void fuzzy(const QStringList& passwds, const QStringList& pattns) {
-        if (pattns.size() == 0) {
-            for (auto passwd : passwds)
-                cout << qPrintable(QString("%1").arg(passwd)) << endl;
+        if (patterns.size() == 0) {
+            for (auto password : passwords)
+                cout << qPrintable(QString("%1").arg(password)) << endl;
         } else {
-            Fuzzy fz = Fuzzy(passwds);
-            for (auto pattn : pattns) {
-                cout << qPrintable(pattn) << endl;
+            util::FuzzyFinder fuzzyFinder(passwords);
+            for (auto pattern : patterns) {
+                cout << qPrintable(pattern) << endl;
 
-                QStringList res = fz.match(pattn);
-                if (! res.size())
+                auto res = fuzzyFinder.match(pattern);
+                if (! res.size()) {
                     continue;
-                for (auto r : res)
+                } for (auto r : res) {
                     cout << "    " << qPrintable(r) << endl;
+                }
             }
         }
+
+        return 0;
     }
 }

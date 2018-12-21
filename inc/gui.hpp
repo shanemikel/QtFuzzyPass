@@ -2,10 +2,8 @@
 
 #include <QtWidgets>
 #include <QStringList>
-#include <QListWidget>
-#include <QLineEdit>
-
-#include <fuzzy.hpp>
+#include <QDir>
+#include <QMap>
 
 namespace gui {
     int main(QApplication& app, const QStringList& args);
@@ -13,25 +11,17 @@ namespace gui {
     class Window : public QWidget {
         Q_OBJECT
     public:
-        explicit Window(const QString& title, QWidget* parent = Q_NULLPTR);
-        ~Window() override;
+        explicit Window(QWidget* parent = Q_NULLPTR);
 
-        void resize(int width, int height);
-        void setPasswords(const QStringList& passwords);
-        void setList(const QStringList& newList);
-
-    private:
-        int selected_row = 0;
-        Fuzzy* finder;
-
-        QPointer<QVBoxLayout> layout;
-        QPointer<QLineEdit> searchBar;
-        QPointer<QListWidget> passList;
+        void moveToCenter();
 
     public:
         virtual void keyPressEvent(QKeyEvent* event) override;
 
     private slots:
-        void search(const QString& searchString);
+        void copyPassword(const QString& password);
+
+    private:
+        QMap<QString, QFileInfo> passwords;
     };
 }

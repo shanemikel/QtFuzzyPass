@@ -8,25 +8,26 @@
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
-    app.setApplicationName("QtFuzzyPass");
+    app.setApplicationName("pass-qt");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("A fuzzy-finder interface to password-store!");
+    parser.setApplicationDescription("Qt fuzzy-finder interface to password-store");
     parser.addHelpOption();
 
     parser.addOptions({
-            {{"t", "test"}, app.translate("main", "A simple testing interface")},
+            {{"t", "test"}, app.translate("main", "Testing interface")},
             {{"c", "cli"},  app.translate("main", "Command line interface")},
             {{"g", "gui"},  app.translate("main", "Graphic interface")}
         });
     parser.process(app);
 
-    if (parser.isSet("test"))
+    if (parser.isSet("test")) {
         return test::main(parser.positionalArguments());
-    else if (parser.isSet("cli"))
+    } else if (parser.isSet("cli")) {
         return cli::main(parser.positionalArguments());
-    else if (parser.isSet("gui"))
+    } else if (parser.isSet("gui")) {
         return gui::main(app, parser.positionalArguments());
-    else
+    } else {
         return 1;
+    }
 }

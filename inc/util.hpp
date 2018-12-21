@@ -4,9 +4,15 @@
 #include <QMap>
 
 namespace util {
-    class NoPasswordStore : public std::runtime_error {
+    class FuzzyFinder {
     public:
-        NoPasswordStore();
+        explicit FuzzyFinder(const QStringList& strings);
+
+        QStringList match(const QString& searchString) const;
+
+    private:
+        const QStringList strings;
+        QRegExp patternFromString(const QString& string) const;
     };
 
     QDir getPasswordStore();
