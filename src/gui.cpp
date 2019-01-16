@@ -45,10 +45,19 @@ namespace gui {
     }
 
     void Window::copyPassword(const QString& password) {
+        int ret = util::copyPasswordToClipboard(password);
+
         QMessageBox passMsg;
-        passMsg.setText("Copying password to clipboard:");
-        passMsg.setInformativeText(password);
-        passMsg.setStandardButtons(QMessageBox::Abort);
+        if (ret == 0) {
+            passMsg.setText(tr("Copied password to clipboard"));
+            // passMsg.setText(tr("Copied password to clipboard:"));
+            // passMsg.setInformativeText(password);
+        } else {
+            passMsg.setText(tr("An error occurred"));
+        }
+        passMsg.setStandardButtons(QMessageBox::Ok);
         passMsg.exec();
+
+        close();
     }
 }

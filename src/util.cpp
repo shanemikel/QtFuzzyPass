@@ -2,6 +2,7 @@
 
 #include <QRegExp>
 #include <algorithm>
+#include <QProcess>
 
 namespace util {
     FuzzyFinder::FuzzyFinder(const QStringList& strings) : strings(strings) {}
@@ -93,5 +94,15 @@ namespace util {
                 dirs.append(QDir(dirInfo.filePath()));
         }
         return map;
+    }
+
+    int copyPasswordToClipboard(const QString& relpath) {
+        QProcess pass;
+        pass.start("pass", QStringList() << "-c" << relpath);
+
+        if (! pass.waitForStarted() || ! pass.waitForFinished())
+            return 1;
+
+        return pass.exitCode();
     }
 }

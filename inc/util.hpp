@@ -17,4 +17,6 @@ namespace util {
 
     QDir getPasswordStore();
     QMap<QString, QFileInfo> makePasswordMap(const QDir& passwordStore);
+
+    int copyPasswordToClipboard(const QString& relpath);
 }
