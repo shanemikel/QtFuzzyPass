@@ -1,14 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-  <file>icons/keychain.png</file>
-
-  <file>icons/keychain_128.png</file>
-  <file>icons/keychain_64.png</file>
-  <file>icons/keychain_32.png</file>
-
-  <file>icons/crypto.png</file>
-  <file>icons/padlock.png</file>
-  <file>icons/unlocked.png</file>
-  <file>icons/locked.png</file>
+  <file name="keychain.png">keychain.iconset/icon_256x256.png</file>
 </qresource>
 </RCC>

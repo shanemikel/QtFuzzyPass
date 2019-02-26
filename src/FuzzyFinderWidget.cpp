@@ -1,8 +1,28 @@
 #include <FuzzyFinderWidget.hpp>
+#include <QLineEdit>
 
 #include <iostream>
 
 namespace gui {
+    class SearchBarWidget : public QLineEdit {
+    public:
+        explicit SearchBarWidget(FuzzyFinderWidget* parent = Q_NULLPTR)
+            : QLineEdit(parent) {}
+
+        virtual void keyPressEvent(QKeyEvent* event) override {
+            switch (event->key()) {
+            case Qt::Key_Up:
+            case Qt::Key_Down:
+            case Qt::Key_Return:
+                ((FuzzyFinderWidget*) parentWidget())->keyPressEvent(event);
+                break;
+            default:
+                QLineEdit::keyPressEvent(event);
+                break;
+            }
+        }
+    };
+
     FuzzyFinderWidget::FuzzyFinderWidget(QWidget* parent) : QWidget(parent) {
         fuzzyFinder = nullptr;
 
@@ -11,7 +31,7 @@ namespace gui {
         {
             auto topLayout = new QHBoxLayout();
 
-            auto searchBar = new QLineEdit(this);
+            auto searchBar = new SearchBarWidget(this);
             connect(searchBar, SIGNAL (textChanged(const QString&)),
                     this, SLOT (searchList(const QString&)));
             topLayout->addWidget(searchBar);

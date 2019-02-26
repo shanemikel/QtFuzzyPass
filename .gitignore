@@ -1,5 +1,7 @@
 pass-qt
+pass-qt.app
 .directory
+.DS_Store
 Makefile
 out
 .qmake.stash

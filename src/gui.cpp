@@ -16,7 +16,7 @@ namespace gui {
 
     Window::Window(QWidget* parent) : QWidget(parent) {
         setWindowTitle(tr("Password Store"));
-        setWindowIcon(QIcon(":/icons/keychain_32.png"));
+        // setWindowIcon(QIcon(":/keychain.iconset/icon_256x256.png"));
 
         passwords = util::makePasswordMap(util::getPasswordStore());
 
@@ -50,8 +50,6 @@ namespace gui {
         QMessageBox passMsg;
         if (ret == 0) {
             passMsg.setText(tr("Copied password to clipboard"));
-            // passMsg.setText(tr("Copied password to clipboard:"));
-            // passMsg.setInformativeText(password);
         } else {
             passMsg.setText(tr("An error occurred"));
         }

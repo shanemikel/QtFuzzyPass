@@ -25,9 +25,7 @@ int main(int argc, char** argv) {
         return test::main(parser.positionalArguments());
     } else if (parser.isSet("cli")) {
         return cli::main(parser.positionalArguments());
-    } else if (parser.isSet("gui")) {
-        return gui::main(app, parser.positionalArguments());
     } else {
-        return 1;
+        return gui::main(app, parser.positionalArguments());
     }
 }
