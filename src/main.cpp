@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
         });
     parser.process(app);
 
+    QDir::setCurrent(QCoreApplication::applicationDirPath());
+
     if (parser.isSet("test")) {
         return test::main(parser.positionalArguments());
     } else if (parser.isSet("cli")) {

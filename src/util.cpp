@@ -98,7 +98,8 @@ namespace util {
 
     int copyPasswordToClipboard(const QString& relpath) {
         QProcess pass;
-        pass.start("pass", QStringList() << "-c" << relpath);
+        pass.start("./user.sh", QStringList()
+                   << "pass" << "-c" << relpath);
 
         if (! pass.waitForStarted() || ! pass.waitForFinished())
             return 1;
