@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-  <file name="keychain.png">keychain.iconset/icon_256x256.png</file>
+  <file>icon.png</file>
 </qresource>
 </RCC>

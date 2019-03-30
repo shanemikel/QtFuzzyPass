@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Password Store
+Type=Application
+Terminal=false
+Exec=pass-qt -g
+Icon=pass-qt

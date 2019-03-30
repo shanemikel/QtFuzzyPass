@@ -16,7 +16,7 @@ namespace gui {
 
     Window::Window(QWidget* parent) : QWidget(parent) {
         setWindowTitle(tr("Password Store"));
-        // setWindowIcon(QIcon(":/keychain.iconset/icon_256x256.png"));
+        setWindowIcon(QIcon(":/icon.png"));
 
         passwords = util::makePasswordMap(util::getPasswordStore());
 
